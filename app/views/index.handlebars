@@ -1,0 +1,91 @@
+<h1>FriendFinder!</h1>
+
+<ul>
+    {{#each friends}}
+    <li>
+        <p>
+            {{this.id}}. {{this.friend}}
+
+            <button data-friendid="{{this.id}}" class="delfriend">Delete friend!</button>
+        </p>
+    </li>
+    {{/each}}
+</ul>
+
+<h2>Add friend</h2>
+<form id="addfriend" class="button-size">
+    <textarea type="text" name="addfriend"></textarea>
+    <button type="submit">Save friend!</button>
+</form>
+
+<h2>Update a friend</h2>
+<form id="updatefriend" class="button-size">
+    <select name="id">
+        {{#each friends}}
+        <option value="{{this.id}}">{{this.friend}}</option>
+        {{/each}}
+    </select>
+    <textarea type="text" name="friend" placeholder="friend"></textarea>
+    <button type="submit">Update list!</button>
+</form>
+
+<script type="text/javascript">
+    $(".delfriend").on("click", function (event) {
+        var id = $(this).data("friendid");
+
+        // Send the DELETE request.
+        $.ajax("/friends/" + id, {
+            type: "DELETE"
+        }).then(
+            function () {
+                console.log("deleted id ", id);
+                // Reload the page to get the updated list
+                location.reload();
+            }
+        );
+    });
+
+    $("#addfriend").on("submit", function (event) {
+        // Make sure to preventDefault on a submit event.
+        event.preventDefault();
+
+        var newfriend = {
+            friend: $("#addfriend [name=friend]").val().trim()
+        };
+
+        // Send the POST request.
+        $.ajax("/friends", {
+            type: "POST",
+            data: newfriend
+        }).then(
+            function () {
+                console.log("added new friend");
+                // Reload the page to get the updated list
+                location.reload();
+            }
+        );
+    });
+
+    $("#updatemovie").on("submit", function (event) {
+        // Make sure to preventDefault on a submit event.
+        event.preventDefault();
+
+        var id = $("[name=id]").val().trim();
+
+        var updatedMovie = {
+            movie: $("#updatemovie [name=movie]").val().trim()
+        };
+
+        // Send the PUT request.
+        $.ajax("/friends/" + id, {
+            type: "PUT",
+            data: updatedMovie
+        }).then(
+            function () {
+                console.log("updated id ", id);
+                // Reload the page to get the updated list
+                location.reload();
+            }
+        );
+    });
+</script>
