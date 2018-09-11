@@ -19,6 +19,16 @@ require("./routes/htmlRoutes")(app);
 // app.use(apiroutes);
 // var htmlroutes= require("/routes/htmlRoutes")(app);
 // app.use(htmlroutes)
+if (process.env.JAWSDB_URL){
+  connection= mysql.createConnection(process.env.JAWSDB_URL);
+} else {
+connection = mysql.createConnection({
+  host: 'bbj31ma8tye2kagi.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
+  user: 'u5s0ty1c3kq923ik', 
+  password: 'isbcdf9cp2helm0c',
+  database: 'bkrjfusqillfdkq0'
+});
+};
 
 app.listen(PORT, function() {
     // Log (server-side) when our server has started
